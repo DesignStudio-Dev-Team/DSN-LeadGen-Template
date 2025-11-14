@@ -347,3 +347,16 @@ border: 2px solid #000; /* black border */
 .gfield--type-honeypot {
     display:none !important;
 }
+
+.gfield {
+  margin-bottom:15px !important;
+}
+
+.ginput_container {
+  margin:0 !important; 
+}
+
+.dsn-leadgen-top h1 {
+  border-bottom:1px solid #000;
+  padding-bottom:10px;
+}
