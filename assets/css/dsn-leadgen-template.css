@@ -1,0 +1,346 @@
+/* DSN LeadGen Template - Vanilla CSS
+   Two-column layout and Gravity Forms overrides. */
+.dsn-leadgen-top {
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+}
+
+#dsn-leadgen-wrapper.dsn-leadgen-wrap {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  padding: 0px;
+  box-sizing: border-box;
+  width:100%;
+  max-width:1300px;
+  margin:0 auto;
+}
+
+.dsn-left {
+  flex: 0 0 55%;
+}
+.dsn-right {
+  flex: 1 1 45%;
+}
+
+.dsn-logo-wrapper {
+    position:relative;
+    margin-top:100px;
+}
+.dsn-logo img{ max-width:305px; display:block; margin:0; }
+
+.dsn-image {
+  width:100%;
+  height:612px;
+  background-position:center center;
+  background-size:cover;
+  border-radius:2px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+}
+.dsn-image--placeholder { background:#f2f2f2; border:1px solid #e1e1e1; }
+
+.dsn-left-content { margin-top:18px; color:#333; line-height:1.5; }
+
+.dsn-right-inner{ max-width:520px; margin:0 auto; }
+.dsn-right-intro{ margin-bottom:18px; font-size:18px; color:#222; }
+
+
+
+.gform_wrapper.gravity-theme .gf_progressbar_title {
+    font-size:18px !important;
+    color:#000 !important;
+}
+
+/* Gravity Form % completed fix */
+.gform_wrapper.gravity-theme .gf_progressbar_percentage span {
+    float:left !important;
+}
+
+/* Gravity Form completed bar fix */ 
+.gf_progressbar_percentage {
+    background-color: rgb(9, 102, 149);
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    border-radius: 30px;
+}
+
+
+/* Gravity Forms overrides - high specificity under wrapper */
+#dsn-leadgen-wrapper .gform_wrapper { font-family: inherit; color: #222; }
+#dsn-leadgen-wrapper .gform_wrapper .gfield_label { font-weight:600; margin-bottom:6px; }
+#dsn-leadgen-wrapper .gform_wrapper input[type="text"],
+#dsn-leadgen-wrapper .gform_wrapper input[type="email"],
+#dsn-leadgen-wrapper .gform_wrapper input[type="tel"],
+#dsn-leadgen-wrapper .gform_wrapper textarea,
+#dsn-leadgen-wrapper .gform_wrapper select { 
+  width:100%; padding:10px 12px; box-sizing:border-box; border:1px solid #d9d9d9; border-radius:2px; font-size:15px;
+}
+
+/* Larger checkboxes and radios */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"],
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"] {
+  transform: scale(1.35);
+  -webkit-transform: scale(1.35);
+  margin-right:8px;
+}
+
+/* Make labels bigger for readability */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_label, 
+#dsn-leadgen-wrapper .gform_wrapper .choice_label { font-size:15px; }
+
+/* Progress bar styling for multi-page Gravity Forms */
+#dsn-leadgen-wrapper .gform_wrapper .gform_progress { margin-bottom:16px; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_progress_bar { background:#0d6a80; height:10px; border-radius:3px; }
+
+/* Buttons */
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_button { background:#0b6b82; color:#fff; padding:10px 20px; border:none; border-radius:2px; cursor:pointer; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_button:hover { opacity:0.95; }
+
+/* Make sure the form doesn't inherit theme container widths */
+#dsn-leadgen-wrapper .gform_wrapper { max-width:100%; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  #dsn-leadgen-wrapper.dsn-leadgen-wrap { flex-direction:column; padding:20px; }
+  .dsn-left, .dsn-right { flex: 1 1 100%; }
+  .dsn-image { height:320px; }
+}
+
+/* Design polish to match provided mockups */
+.dsn-left { position: relative; }
+.dsn-logo { position: absolute; left: 50%; transform: translateX(-50%); top: -50px; background: #fff; padding:0; border-radius:4px; box-shadow:0 6px 18px rgba(0,0,0,0.08); z-index:3; }
+.dsn-logo img{ width:100%; max-width:300px; display:block; }
+.dsn-left .dsn-image { margin-top:46px; }
+
+.dsn-left-content h1, .dsn-left-content h2 { margin:0 0 8px 0; font-weight:700; color:#111; }
+.dsn-left-content { margin-top:20px; color:#222; line-height:1.4; font-size:18px; }
+
+/* Right column layout and heading */
+.dsn-right-inner { max-width:520px; margin:0 auto; }
+.dsn-right .gform_wrapper { position:relative; }
+.dsn-right .gform_wrapper .gform_heading { 
+    display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; 
+    position: absolute;
+    right: 0;
+    top: -15px;
+ }
+.dsn-right .gform_wrapper .gform_heading .gform_description { color:#666; font-size:13px; }
+
+/* Stylized progress bar (step indicator) */
+#dsn-leadgen-wrapper .gform_wrapper .gform_progress { background: transparent; padding: 6px 0 14px 0; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_progress_inner { background:#eee; border-radius:10px; height:12px; overflow:hidden; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_progress_bar { background:#0b6b82; height:12px; border-radius:10px; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_page_steps { font-size:13px; color:#444; margin-bottom:8px; }
+
+/* Custom checkboxes and radios (clean, larger tappable targets) */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li { margin-bottom:10px; list-style:none; }
+
+/* Ensure various choice containers are positioned so our absolute pseudo-elements stay contained */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice { position: relative; padding-left:0px; margin:0px; }
+
+
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label { position: relative; padding-left:38px; margin:0px; }
+
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label { cursor:pointer; display:inline-block; color:#222; }
+
+/* Make native inputs visually hidden but still present for accessibility and focus handling. Position absolute so they sit inside container. */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"],
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Checkbox square: black border, gray background when unchecked; blue background with white check when checked */
+/* Support different GF choice markup: li, .gchoice, .gfield_choice, and label-wrapped inputs */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label > input + span::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  border: 2px solid #000; /* black border */
+  background: #eee; /* light gray background when unchecked */
+  box-sizing: border-box;
+}
+
+/* Checked state: blue background with white check */
+/* Checked state selectors covering input+label and container.dsn-checked fallbacks */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label::before {
+  background: #0b6b82; /* blue */
+  border-color: #0b6b82;
+}
+/* Checkmark */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label::after {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-60%) rotate(45deg);
+  width: 6px;
+  height: 12px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+
+/* Hover/focus states */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio, #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox {
+    cursor: pointer;
+}
+
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label:hover::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label:focus::before { box-shadow: 0 0 0 3px rgba(11,107,130,0.06); }
+
+/* Mirror checkbox selectors for radio variants (round) to cover all GF markup patterns */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input + span::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+border: 2px solid #000; /* black border */
+  background: #eee; /* light gray background when unchecked */
+  box-sizing: border-box;
+}
+
+/* Radio checked state: blue background with white inner dot */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice.dsn-checked label::before {
+  background: #0b6b82;
+  border-color: #0b6b82;
+}
+
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice.dsn-checked label::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Radio circle: support different GF markup variants */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input + span::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+border: 2px solid #000; /* black border */
+  background: #eee; /* light gray background when unchecked */
+  box-sizing: border-box;
+}
+/* Radio checked state - covers input+label and JS-driven container.dsn-checked */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice input[type="radio"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice.dsn-checked label::before {
+  background: #0b6b82;
+  border-color: #0b6b82;
+}
+/* Radio inner dot */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice input[type="radio"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice.dsn-checked label::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Input and help text styling */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_description { color:#666; font-size:13px; margin-top:6px; }
+#dsn-leadgen-wrapper .gform_wrapper input[type="text"],
+#dsn-leadgen-wrapper .gform_wrapper input[type="email"],
+#dsn-leadgen-wrapper .gform_wrapper textarea { border:1px solid #e0e0e0; padding:12px; font-size:14px; }
+
+/* Buttons: Next (primary) and Previous (secondary) */
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_button { border-radius:2px; padding:11px 20px; font-weight:600; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_next_button,
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_submit_button { background:#0b6b82; color:#fff; border:none; }
+#dsn-leadgen-wrapper .gform_wrapper .gform_footer .gform_previous_button { background:#6f6f6f; color:#fff; border:none; }
+
+/* Form inner spacing */
+#dsn-leadgen-wrapper .gform_wrapper .gform_body { padding-top:6px; }
+
+/* Small screens adjustments */
+@media (max-width: 600px) {
+  .dsn-left .dsn-image { height:260px; }
+  .dsn-logo { top:12px; padding:12px 16px; }
+  #dsn-leadgen-wrapper { padding:18px; }
+}
+
+.gform_previous_button {
+    background-color: #777 !important;
+    border-color: #777 !important;
+    color:#fff !important;
+}
+

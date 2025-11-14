@@ -1,0 +1,4 @@
+/* Admin styles for DSN meta box */
+.dsn-media-row { margin-bottom:12px; }
+.dsn-media-preview img { display:block; max-width:100%; height:auto; margin-bottom:6px; }
+.dsn-remove-button { margin-left:8px; }
