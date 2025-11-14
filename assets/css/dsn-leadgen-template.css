@@ -344,3 +344,6 @@ border: 2px solid #000; /* black border */
     color:#fff !important;
 }
 
+gfield--type-honeypot {
+    display:none !important;
+}
