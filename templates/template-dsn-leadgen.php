@@ -46,7 +46,7 @@ $media_poster = get_post_meta( $post->ID, '_dsn_media_poster', true );
 
         <?php if ( 'video' === $media_type && $media_url ) : ?>
             <div class="dsn-image dsn-image--video">
-                <video muted autoplay loop preload="metadata" <?php echo $media_poster ? 'poster="' . esc_attr( $media_poster ) . '"' : ''; ?> style="width:100%;height:612px;object-fit:cover;">
+                <video muted autoplay loop preload="metadata" <?php echo $media_poster ? 'poster="' . esc_attr( $media_poster ) . '"' : ''; ?> style="width:100%;height:758px;object-fit:cover;">
                     <source src="<?php echo esc_url( $media_url ); ?>" />
                     <?php esc_html_e( 'Your browser does not support the video tag.', 'dsn-leadgen-template' ); ?>
                 </video>

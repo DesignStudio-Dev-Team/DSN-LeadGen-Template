@@ -20,7 +20,26 @@
         var container = findChoiceContainer(input);
         function update(){
           if ( ! container ) { return; }
-          if ( input.checked ) { container.classList.add('dsn-checked'); } else { container.classList.remove('dsn-checked'); }
+          if ( input.type === 'radio' ) {
+            if ( input.checked ) {
+              // remove checked class from other radios in the same group
+              try {
+                var groupName = input.name;
+                var group = wrapper.querySelectorAll('input[type="radio"][name="' + groupName.replace(/"/g, '\\"') + '"]');
+                group.forEach(function(r){
+                  var c = findChoiceContainer(r);
+                  if ( c && c !== container ) { c.classList.remove('dsn-checked'); }
+                });
+              } catch (e) {
+                // fallback: ignore
+              }
+              container.classList.add('dsn-checked');
+            } else {
+              container.classList.remove('dsn-checked');
+            }
+          } else {
+            if ( input.checked ) { container.classList.add('dsn-checked'); } else { container.classList.remove('dsn-checked'); }
+          }
         }
         input.addEventListener('change', update);
         // Allow radio buttons to be deselected by clicking the selected option again.
