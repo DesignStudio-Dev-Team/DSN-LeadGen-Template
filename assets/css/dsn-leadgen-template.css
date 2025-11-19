@@ -6,6 +6,10 @@
     margin:0 auto;
 }
 
+.theme-designstudio-mvp .dsn-leadgen-top {
+    margin-top: 100px !important;
+}
+
 #dsn-leadgen-wrapper.dsn-leadgen-wrap {
   display: flex;
   gap: 50px;
@@ -49,15 +53,22 @@
 .gform_wrapper.gravity-theme .gf_progressbar_title {
     font-size:18px !important;
     color:#000 !important;
-    font-weight: 900;
-    margin:0;
-    margin-bottom:5px;
-    font-family:Arial, Helvetica, sans-serif;
+    font-weight: 900 !important;
+    margin:0 !important;
+    margin-bottom:5px !important;
+    font-family:Arial, Helvetica, sans-serif !important;
 }
 
 /* Gravity Form % completed fix */
 .gform_wrapper.gravity-theme .gf_progressbar_percentage span {
     float:left !important;
+    display: block;
+    font-size: 15px !important;
+    line-height: 21px !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+    min-width: 2em !important;
+    width: auto !important;
 }
 
 /* Gravity Form completed bar fix */ 
@@ -67,6 +78,7 @@
     padding-right: 10px;
     color: #fff;
     border-radius: 30px;
+    height:100%;
 }
 
 #dsn-leadgen-wrapper .gform_wrapper fieldset {
@@ -79,7 +91,7 @@
   background-color: #ddd;
   margin-bottom: 1em;
   width: 100%;
-  height: 30px;
+  height: 100%;
 }
 
 .gf_progressbar_percentage {
@@ -90,7 +102,7 @@
     border-radius: 30px;
     z-index: 1000;
     position: relative;
-    height: 30px;
+    height: 100%;
 }
 
 /* Gravity Forms overrides - high specificity under wrapper */

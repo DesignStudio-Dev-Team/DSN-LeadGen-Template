@@ -20,7 +20,7 @@
       var attachment = frame.state().get('selection').first().toJSON();
       if ( ! attachment ) { return; }
       // target: logo | image | media
-      var prefix = 'dsn_' + target;
+      var prefix = 'dsn_lgp_' + target;
       // set ID and URL inputs
       $('#' + prefix + '_id').val( attachment.id );
       $('#' + prefix + '_url').val( attachment.url ).trigger('change');
@@ -39,7 +39,7 @@
   $(document).ready(function(){
     // Toggle visibility of image/video sections based on selected media type
     function toggleMediaSections(){
-      var selected = $('input[name="dsn_media_type"]:checked').val() || 'image';
+      var selected = $('input[name="dsn_lgp_media_type"]:checked').val() || 'image';
       if ( selected === 'image' ){
         $('.dsn-media-section--image').show();
         $('.dsn-media-section--video').hide();
@@ -53,7 +53,7 @@
     toggleMediaSections();
 
     // on change
-    $(document).on('change', 'input[name="dsn_media_type"]', function(){
+    $(document).on('change', 'input[name="dsn_lgp_media_type"]', function(){
       toggleMediaSections();
     });
 
@@ -66,7 +66,7 @@
     $(document).on('click', '.dsn-remove-button', function(e){
       e.preventDefault();
       var target = $(this).data('target');
-      var prefix = 'dsn_' + target;
+      var prefix = 'dsn_lgp_' + target;
       $('#' + prefix + '_id').val('');
       $('#' + prefix + '_url').val('').trigger('change');
       $('#' + prefix + '_preview').attr('src','').hide();
@@ -81,7 +81,7 @@
       var val = $(this).val();
       if ( val ) {
         preview.attr('src', val).show();
-        $('.dsn-remove-button[data-target="' + target.replace('dsn_','') + '"]').show();
+        $('.dsn-remove-button[data-target="' + target.replace('dsn_lgp_','') + '"]').show();
       } else {
         preview.attr('src','').hide();
       }

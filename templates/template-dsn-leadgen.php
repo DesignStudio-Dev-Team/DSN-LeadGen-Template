@@ -16,14 +16,14 @@ global $post;
 
 
 $topContent = get_the_content($post->ID);
-$logo_url     = get_post_meta( $post->ID, '_dsn_logo_url', true );
-$image_url    = get_post_meta( $post->ID, '_dsn_image_url', true );
-$main_content = get_post_meta( $post->ID, '_dsn_main_content', true );
-$right_intro  = get_post_meta( $post->ID, '_dsn_right_content', true );
-$media_type   = get_post_meta( $post->ID, '_dsn_media_type', true );
+$logo_url     = get_post_meta( $post->ID, 'dsn_lgp_logo_url', true );
+$image_url    = get_post_meta( $post->ID, 'dsn_lgp_image_url', true );
+$main_content = get_post_meta( $post->ID, 'dsn_lgp_main_content', true );
+$right_intro  = get_post_meta( $post->ID, 'dsn_lgp_right_content', true );
+$media_type   = get_post_meta( $post->ID, 'dsn_lgp_media_type', true );
 if ( empty( $media_type ) ) { $media_type = 'image'; }
-$media_url    = get_post_meta( $post->ID, '_dsn_media_url', true );
-$media_poster = get_post_meta( $post->ID, '_dsn_media_poster', true );
+$media_url    = get_post_meta( $post->ID, 'dsn_lgp_media_url', true );
+$media_poster = get_post_meta( $post->ID, 'dsn_lgp_media_poster', true );
 
 ?>
 

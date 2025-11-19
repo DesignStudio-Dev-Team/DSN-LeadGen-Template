@@ -18,8 +18,14 @@ define( 'DSN_LG_URL', plugin_dir_url( __FILE__ ) );
 // Enqueue front-end assets late so they can override theme styles (priority 999)
 add_action( 'wp_enqueue_scripts', 'dsn_lg_enqueue_assets', 999 );
 function dsn_lg_enqueue_assets() {
-    wp_enqueue_style( 'dsn-lgt-style', DSN_LG_URL . 'assets/css/dsn-leadgen-template.css', array(), '0.1.0' );
-    wp_enqueue_script( 'dsn-lgt-script', DSN_LG_URL . 'assets/js/dsn-leadgen-template.js', array(), '0.1.0', true );
+    wp_enqueue_style( 'dsn-lgt-style', DSN_LG_URL . 'assets/css/dsn-leadgen-template.css', array(), '0.1.3' );
+    wp_enqueue_script( 'dsn-lgt-script', DSN_LG_URL . 'assets/js/dsn-leadgen-template.js', array(), '0.1.3', true );
+}
+
+// Auto-updater
+if ( is_admin() ) {
+    require_once DSN_LG_DIR . 'includes/class-dsn-plugin-updater.php';
+    new DSN_Plugin_Updater( __FILE__, 'DesignStudio-Dev-Team/DSN-LeadGen-Template' );
 }
 
 // Register page template
@@ -73,17 +79,19 @@ function dsn_lg_meta_box_callback( $post ) {
     // Nonce
     wp_nonce_field( 'dsn_lg_save_meta', 'dsn_lg_meta_nonce' );
 
-    $main_content = get_post_meta( $post->ID, '_dsn_main_content', true );
-    $logo_id      = get_post_meta( $post->ID, '_dsn_logo_id', true );
-    $logo_url     = get_post_meta( $post->ID, '_dsn_logo_url', true );
-    $media_id     = get_post_meta( $post->ID, '_dsn_media_id', true );
-    $media_url    = get_post_meta( $post->ID, '_dsn_media_url', true );
-    $media_poster = get_post_meta( $post->ID, '_dsn_media_poster', true );
-    $image_id     = get_post_meta( $post->ID, '_dsn_image_id', true );
-    $image_url    = get_post_meta( $post->ID, '_dsn_image_url', true );
-    $right_intro  = get_post_meta( $post->ID, '_dsn_right_content', true );
-    $media_type   = get_post_meta( $post->ID, '_dsn_media_type', true );
+    $main_content = get_post_meta( $post->ID, 'dsn_lgp_main_content', true );
+    $logo_id      = get_post_meta( $post->ID, 'dsn_lgp_logo_id', true );
+    $logo_url     = get_post_meta( $post->ID, 'dsn_lgp_logo_url', true );
+    $media_id     = get_post_meta( $post->ID, 'dsn_lgp_media_id', true );
+    $media_url    = get_post_meta( $post->ID, 'dsn_lgp_media_url', true );
+    $media_poster = get_post_meta( $post->ID, 'dsn_lgp_media_poster', true );
+    $image_id     = get_post_meta( $post->ID, 'dsn_lgp_image_id', true );
+    $image_url    = get_post_meta( $post->ID, 'dsn_lgp_image_url', true );
+    $right_intro  = get_post_meta( $post->ID, 'dsn_lgp_right_content', true );
+    $media_type   = get_post_meta( $post->ID, 'dsn_lgp_media_type', true );
     if ( empty( $media_type ) ) { $media_type = 'image'; }
+    $brand        = get_post_meta( $post->ID, 'dsn_lgp_brand', true );
+    $cta_label    = get_post_meta( $post->ID, 'dsn_lgp_cta_label', true );
 
     // Main content WYSIWYG
     echo '<p><strong>' . esc_html__( 'Main content (left column)', 'dsn-leadgen-template' ) . '</strong></p>';
@@ -95,26 +103,26 @@ function dsn_lg_meta_box_callback( $post ) {
     // Logo media uploader
     echo '<p><strong>' . esc_html__( 'Logo (left column)', 'dsn-leadgen-template' ) . '</strong></p>';
     echo '<div class="dsn-media-row">';
-    echo '<input type="hidden" name="dsn_logo_id" id="dsn_logo_id" value="' . esc_attr( $logo_id ) . '" />';
-    echo '<input type="hidden" name="dsn_logo_url" id="dsn_logo_url" value="' . esc_attr( $logo_url ) . '" />';
-    echo '<div class="dsn-media-preview"><img id="dsn_logo_preview" src="' . esc_attr( $logo_url ) . '" style="max-width:200px;max-height:80px;'. ( $logo_url ? '' : 'display:none;' ) .'" /></div>';
+    echo '<input type="hidden" name="dsn_lgp_logo_id" id="dsn_lgp_logo_id" value="' . esc_attr( $logo_id ) . '" />';
+    echo '<input type="hidden" name="dsn_lgp_logo_url" id="dsn_lgp_logo_url" value="' . esc_attr( $logo_url ) . '" />';
+    echo '<div class="dsn-media-preview"><img id="dsn_lgp_logo_preview" src="' . esc_attr( $logo_url ) . '" style="max-width:200px;max-height:80px;'. ( $logo_url ? '' : 'display:none;' ) .'" /></div>';
     echo '<p><button type="button" class="button dsn-upload-button" data-target="logo">Select Logo</button> <button type="button" class="button dsn-remove-button" data-target="logo"' . ( $logo_url ? '' : ' style="display:none;"' ) . '>Remove</button></p>';
     echo '</div>';
 
         // Media type selection (image or video)
     echo '<p><strong>' . esc_html__( 'Left column media type', 'dsn-leadgen-template' ) . '</strong></p>';
     echo '<p>';
-    echo '<label><input type="radio" name="dsn_media_type" value="image" ' . checked( $media_type, 'image', false ) . ' /> ' . esc_html__( 'Image (default)', 'dsn-leadgen-template' ) . '</label><br/>';
-    echo '<label><input type="radio" name="dsn_media_type" value="video" ' . checked( $media_type, 'video', false ) . ' /> ' . esc_html__( 'Video', 'dsn-leadgen-template' ) . '</label>';
+    echo '<label><input type="radio" name="dsn_lgp_media_type" value="image" ' . checked( $media_type, 'image', false ) . ' /> ' . esc_html__( 'Image (default)', 'dsn-leadgen-template' ) . '</label><br/>';
+    echo '<label><input type="radio" name="dsn_lgp_media_type" value="video" ' . checked( $media_type, 'video', false ) . ' /> ' . esc_html__( 'Video', 'dsn-leadgen-template' ) . '</label>';
     echo '</p>';
     
     // Left column image uploader (visible when media_type === 'image')
     echo '<div class="dsn-media-section dsn-media-section--image"' . ( $media_type === 'image' ? '' : ' style="display:none;"' ) . '>';
     echo '<p><strong>' . esc_html__( 'Image (left column)', 'dsn-leadgen-template' ) . '</strong></p>';
     echo '<div class="dsn-media-row">';
-    echo '<input type="hidden" name="dsn_image_id" id="dsn_image_id" value="' . esc_attr( $image_id ) . '" />';
-    echo '<input type="hidden" name="dsn_image_url" id="dsn_image_url" value="' . esc_attr( $image_url ) . '" />';
-    echo '<div class="dsn-media-preview"><img id="dsn_image_preview" src="' . esc_attr( $image_url ) . '" style="max-width:100%;height:120px;object-fit:cover;' . ( $image_url ? '' : 'display:none;' ) . '" /></div>';
+    echo '<input type="hidden" name="dsn_lgp_image_id" id="dsn_lgp_image_id" value="' . esc_attr( $image_id ) . '" />';
+    echo '<input type="hidden" name="dsn_lgp_image_url" id="dsn_lgp_image_url" value="' . esc_attr( $image_url ) . '" />';
+    echo '<div class="dsn-media-preview"><img id="dsn_lgp_image_preview" src="' . esc_attr( $image_url ) . '" style="max-width:100%;height:120px;object-fit:cover;' . ( $image_url ? '' : 'display:none;' ) . '" /></div>';
     echo '<p><button type="button" class="button dsn-upload-button" data-target="image">Select Image</button> <button type="button" class="button dsn-remove-button" data-target="image"' . ( $image_url ? '' : ' style="display:none;"' ) . '>Remove</button></p>';
     echo '</div>';
     echo '</div>';
@@ -122,15 +130,28 @@ function dsn_lg_meta_box_callback( $post ) {
     // Video fields (visible when media_type === 'video')
     echo '<div class="dsn-media-section dsn-media-section--video"' . ( $media_type === 'video' ? '' : ' style="display:none;"' ) . '>';
     echo '<p><strong>' . esc_html__( 'Optional Video URL', 'dsn-leadgen-template' ) . '</strong></p>';
-    echo '<input style="width:100%;" type="text" name="dsn_media_url" id="dsn_media_url" value="' . esc_attr( $media_url ) . '" />';
+    echo '<input style="width:100%;" type="text" name="dsn_lgp_media_url" id="dsn_lgp_media_url" value="' . esc_attr( $media_url ) . '" />';
     echo '<p><strong>' . esc_html__( 'Video Poster (optional)', 'dsn-leadgen-template' ) . '</strong></p>';
     echo '<div class="dsn-media-row">';
-    echo '<input type="hidden" name="dsn_media_id" id="dsn_media_id" value="' . esc_attr( $media_id ) . '" />';
-    echo '<input type="hidden" name="dsn_media_poster" id="dsn_media_poster" value="' . esc_attr( $media_poster ) . '" />';
+    echo '<input type="hidden" name="dsn_lgp_media_id" id="dsn_lgp_media_id" value="' . esc_attr( $media_id ) . '" />';
+    echo '<input type="hidden" name="dsn_lgp_media_poster" id="dsn_lgp_media_poster" value="' . esc_attr( $media_poster ) . '" />';
     echo '<div class="dsn-media-preview"><img id="dsn_media_preview" src="' . esc_attr( $media_poster ) . '" style="max-width:100%;height:120px;object-fit:cover;' . ( $media_poster ? '' : 'display:none;' ) . '" /></div>';
     echo '<p><button type="button" class="button dsn-upload-button" data-target="media">Select Poster</button> <button type="button" class="button dsn-remove-button" data-target="media"' . ( $media_poster ? '' : ' style="display:none;"' ) . '>Remove</button></p>';
     echo '</div>';
     echo '</div>';
+
+    echo '<div class="dsn-row-2-col">';
+    echo '<div>';
+    echo '<p><strong>' . esc_html__( 'Brand Name', 'dsn-leadgen-template' ) . '</strong></p>';
+    echo '<input type="text" name="dsn_lgp_brand" value="' . esc_attr( $brand ) . '" class="widefat" />';
+    echo '</div>';
+
+    echo '<div>';
+    echo '<p><strong>' . esc_html__( 'Call to Action Label', 'dsn-leadgen-template' ) . '</strong></p>';
+    echo '<input type="text" name="dsn_lgp_cta_label" value="' . esc_attr( $cta_label ) . '" class="widefat" />';
+    echo '</div>';
+    echo '</div>';
+
 }
 
 add_action( 'save_post_page', 'dsn_lg_save_meta' );
@@ -142,41 +163,51 @@ function dsn_lg_save_meta( $post_id ) {
         return;
     }
     if ( isset( $_POST['dsn_main_content'] ) ) {
-        update_post_meta( $post_id, '_dsn_main_content', wp_kses_post( $_POST['dsn_main_content'] ) );
+        update_post_meta( $post_id, 'dsn_lgp_main_content', wp_kses_post( $_POST['dsn_main_content'] ) );
     }
     if ( isset( $_POST['dsn_right_content'] ) ) {
-        update_post_meta( $post_id, '_dsn_right_content', wp_kses_post( $_POST['dsn_right_content'] ) );
+        update_post_meta( $post_id, 'dsn_lgp_right_content', wp_kses_post( $_POST['dsn_right_content'] ) );
     }
     // Media type (image or video)
-    if ( isset( $_POST['dsn_media_type'] ) ) {
-        update_post_meta( $post_id, '_dsn_media_type', sanitize_text_field( $_POST['dsn_media_type'] ) );
+    if ( isset( $_POST['dsn_lgp_media_type'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_media_type', sanitize_text_field( $_POST['dsn_lgp_media_type'] ) );
+    }
+
+    // Brand
+    if ( isset( $_POST['dsn_lgp_brand'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_brand', sanitize_text_field( $_POST['dsn_lgp_brand'] ) );
+    }
+
+    // CTA Label
+    if ( isset( $_POST['dsn_lgp_cta_label'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_cta_label', sanitize_text_field( $_POST['dsn_lgp_cta_label'] ) );
     }
 
     // Logo (ID + URL)
-    if ( isset( $_POST['dsn_logo_id'] ) ) {
-        update_post_meta( $post_id, '_dsn_logo_id', absint( $_POST['dsn_logo_id'] ) );
+    if ( isset( $_POST['dsn_lgp_logo_id'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_logo_id', absint( $_POST['dsn_lgp_logo_id'] ) );
     }
-    if ( isset( $_POST['dsn_logo_url'] ) ) {
-        update_post_meta( $post_id, '_dsn_logo_url', esc_url_raw( $_POST['dsn_logo_url'] ) );
+    if ( isset( $_POST['dsn_lgp_logo_url'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_logo_url', esc_url_raw( $_POST['dsn_lgp_logo_url'] ) );
     }
 
     // Image (ID + URL)
-    if ( isset( $_POST['dsn_image_id'] ) ) {
-        update_post_meta( $post_id, '_dsn_image_id', absint( $_POST['dsn_image_id'] ) );
+    if ( isset( $_POST['dsn_lgp_image_id'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_image_id', absint( $_POST['dsn_lgp_image_id'] ) );
     }
-    if ( isset( $_POST['dsn_image_url'] ) ) {
-        update_post_meta( $post_id, '_dsn_image_url', esc_url_raw( $_POST['dsn_image_url'] ) );
+    if ( isset( $_POST['dsn_lgp_image_url'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_image_url', esc_url_raw( $_POST['dsn_lgp_image_url'] ) );
     }
 
     // Video URL and poster
-    if ( isset( $_POST['dsn_media_url'] ) ) {
-        update_post_meta( $post_id, '_dsn_media_url', esc_url_raw( $_POST['dsn_media_url'] ) );
+    if ( isset( $_POST['dsn_lgp_media_url'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_media_url', esc_url_raw( $_POST['dsn_lgp_media_url'] ) );
     }
-    if ( isset( $_POST['dsn_media_id'] ) ) {
-        update_post_meta( $post_id, '_dsn_media_id', absint( $_POST['dsn_media_id'] ) );
+    if ( isset( $_POST['dsn_lgp_media_id'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_media_id', absint( $_POST['dsn_lgp_media_id'] ) );
     }
-    if ( isset( $_POST['dsn_media_poster'] ) ) {
-        update_post_meta( $post_id, '_dsn_media_poster', esc_url_raw( $_POST['dsn_media_poster'] ) );
+    if ( isset( $_POST['dsn_lgp_media_poster'] ) ) {
+        update_post_meta( $post_id, 'dsn_lgp_media_poster', esc_url_raw( $_POST['dsn_lgp_media_poster'] ) );
     }
 }
 

@@ -2,3 +2,11 @@
 .dsn-media-row { margin-bottom:12px; }
 .dsn-media-preview img { display:block; max-width:100%; height:auto; margin-bottom:6px; }
 .dsn-remove-button { margin-left:8px; }
+
+.dsn-row-2-col {
+    display: flex;
+    gap: 20px;
+}
+.dsn-row-2-col > div {
+    flex: 1;
+}
