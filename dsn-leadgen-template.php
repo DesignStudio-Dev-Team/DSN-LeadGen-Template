@@ -14,12 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'DSN_LG_DIR', plugin_dir_path( __FILE__ ) );
 define( 'DSN_LG_URL', plugin_dir_url( __FILE__ ) );
+define( 'DSN_LG_VERSION', '0.1.0' );
 
 // Enqueue front-end assets late so they can override theme styles (priority 999)
 add_action( 'wp_enqueue_scripts', 'dsn_lg_enqueue_assets', 999 );
 function dsn_lg_enqueue_assets() {
-    wp_enqueue_style( 'dsn-lgt-style', DSN_LG_URL . 'assets/css/dsn-leadgen-template.css', array(), '0.1.3' );
-    wp_enqueue_script( 'dsn-lgt-script', DSN_LG_URL . 'assets/js/dsn-leadgen-template.js', array(), '0.1.3', true );
+    wp_enqueue_style( 'dsn-lgp-style', DSN_LG_URL . 'assets/css/dsn-leadgen-template.css', array(), DSN_LG_VERSION );
+    wp_enqueue_script( 'dsn-lgp-script', DSN_LG_URL . 'assets/js/dsn-leadgen-template.js', array(), DSN_LG_VERSION, true );
 }
 
 // Auto-updater

@@ -35,7 +35,7 @@ class DSN_Plugin_Updater {
 
             // Fix for v-prefixed tags
             $remote_version = ltrim( $remote_version, 'v' );
-            $local_version = $transient->checked[ $this->slug ];
+            $local_version = isset( $transient->checked[ $this->slug ] ) ? $transient->checked[ $this->slug ] : '0.0.0';
 
             if ( $remote_version && version_compare( $local_version, $remote_version, '<' ) ) {
                 $obj = new stdClass();
@@ -83,7 +83,8 @@ class DSN_Plugin_Updater {
             
             // Description from body
             $response->sections = array(
-                'description' => $this->github_response['body']
+                'description' => $this->plugin_data['Description'],
+                'changelog'   => nl2br( $this->github_response['body'] )
             );
             
             // Download link
