@@ -39,9 +39,9 @@ $media_poster = get_post_meta( $post->ID, 'dsn_lgp_media_poster', true );
             <div class="dsn-left-content"> <?php echo apply_filters( 'the_content', $main_content ); ?> </div>
         <?php endif; ?>
 
-        <div class="dsn-logo-wrapper">
+        <div class="dsn-logo-lp-wrapper">
         <?php if ( $logo_url ) : ?>
-            <div class="dsn-logo"><img src="<?php echo esc_url( $logo_url ); ?>" alt="Logo"/></div>
+            <div class="dsn-logo-lp"><img src="<?php echo esc_url( $logo_url ); ?>" alt="Logo"/></div>
         <?php endif; ?>
 
         <?php if ( 'video' === $media_type && $media_url ) : ?>

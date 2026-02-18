@@ -13,14 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Get Version
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
-
     - name: Update Plugin Version
       run: |
-        sed -i "s/Version: .*/Version: ${{ env.VERSION }}/" dsn-leadgen-template.php
-        sed -i "s/define( 'DSN_LG_VERSION', '.*' );/define( 'DSN_LG_VERSION', '${{ env.VERSION }}' );/" dsn-leadgen-template.php
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "Updating version to $VERSION"
+        sed -i "s/Version: .*/Version: $VERSION/" dsn-leadgen-template.php
+        sed -i "s/define( 'DSN_LG_VERSION', '.*' );/define( 'DSN_LG_VERSION', '$VERSION' );/" dsn-leadgen-template.php
 
     - name: Build Zip
       run: |
