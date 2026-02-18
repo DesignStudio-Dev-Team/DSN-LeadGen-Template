@@ -4,6 +4,7 @@
     width:100%;
     max-width:1380px;
     margin:0 auto;
+    margin-top:25px;
 }
 
 .theme-designstudio-mvp .dsn-leadgen-top {
@@ -29,11 +30,11 @@
   flex: 1 1 45%;
 }
 
-.dsn-logo-lp-lp-wrapper {
+.dsn-logo-lp-wrapper {
     position:relative;
     margin-top:100px;
 }
-.dsn-logo-lp-lp img{ max-width:305px; display:block; margin:0; }
+.dsn-logo-lp img{ max-width:305px; display:block; margin:0; padding:15px; }
 
 .dsn-image {
   width:100%;
@@ -106,7 +107,7 @@
 }
 
 /* Gravity Forms overrides - high specificity under wrapper */
-#dsn-leadgen-wrapper .gform_wrapper { font-family: inherit; color: #222; }
+#dsn-leadgen-wrapper .gform_wrapper { font-family: inherit; color: #222; --gf-form-gap-y: 0px; }
 #dsn-leadgen-wrapper .gform_wrapper .gfield_label { font-weight:800; margin-bottom:0px; font-family: Arial, Helvetica, sans-serif; }
 #dsn-leadgen-wrapper .gform_wrapper input[type="text"],
 #dsn-leadgen-wrapper .gform_wrapper input[type="email"],
@@ -491,3 +492,4 @@ border: 2px solid #000; /* black border */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::after {
   background: #fff !important;
 }
+
