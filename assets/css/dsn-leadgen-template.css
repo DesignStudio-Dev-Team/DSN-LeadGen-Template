@@ -29,7 +29,6 @@
 .dsn-right {
   flex: 1 1 45%;
 }
-
 .dsn-logo-lp-wrapper {
     position:relative;
     margin-top:100px;
@@ -491,5 +490,10 @@ border: 2px solid #000; /* black border */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio label input[type="radio"]:checked + span::after,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::after {
   background: #fff !important;
+}
+
+.gform_button, .gform_next_button  {
+  background:black !important;
+  color:white !important;
 }
 

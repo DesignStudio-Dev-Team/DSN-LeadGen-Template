@@ -93,6 +93,10 @@ function dsn_lg_meta_box_callback( $post ) {
     if ( empty( $media_type ) ) { $media_type = 'image'; }
     $brand        = get_post_meta( $post->ID, 'dsn_lgp_brand', true );
     $cta_label    = get_post_meta( $post->ID, 'dsn_lgp_cta_label', true );
+    $padding_top    = get_post_meta( $post->ID, 'dsn_lgp_padding_top', true );
+    $padding_right  = get_post_meta( $post->ID, 'dsn_lgp_padding_right', true );
+    $padding_bottom = get_post_meta( $post->ID, 'dsn_lgp_padding_bottom', true );
+    $padding_left   = get_post_meta( $post->ID, 'dsn_lgp_padding_left', true );
 
     // Main content WYSIWYG
     echo '<p><strong>' . esc_html__( 'Main content (left column)', 'dsn-leadgen-template' ) . '</strong></p>';
@@ -153,6 +157,15 @@ function dsn_lg_meta_box_callback( $post ) {
     echo '</div>';
     echo '</div>';
 
+    // Padding settings
+    echo '<p><strong>' . esc_html__( 'Container Padding (e.g. 20px, 5%, 2rem)', 'dsn-leadgen-template' ) . '</strong></p>';
+    echo '<div class="dsn-row-2-col" style="gap:10px;">';
+    echo '<div><p style="margin:0 0 5px;">' . esc_html__('Top', 'dsn-leadgen-template') . '</p><input type="text" name="dsn_lgp_padding_top" value="' . esc_attr( $padding_top ) . '" class="widefat" placeholder="0px" /></div>';
+    echo '<div><p style="margin:0 0 5px;">' . esc_html__('Right', 'dsn-leadgen-template') . '</p><input type="text" name="dsn_lgp_padding_right" value="' . esc_attr( $padding_right ) . '" class="widefat" placeholder="0px" /></div>';
+    echo '<div><p style="margin:0 0 5px;">' . esc_html__('Bottom', 'dsn-leadgen-template') . '</p><input type="text" name="dsn_lgp_padding_bottom" value="' . esc_attr( $padding_bottom ) . '" class="widefat" placeholder="0px" /></div>';
+    echo '<div><p style="margin:0 0 5px;">' . esc_html__('Left', 'dsn-leadgen-template') . '</p><input type="text" name="dsn_lgp_padding_left" value="' . esc_attr( $padding_left ) . '" class="widefat" placeholder="0px" /></div>';
+    echo '</div>';
+
 }
 
 add_action( 'save_post_page', 'dsn_lg_save_meta' );
@@ -182,6 +195,14 @@ function dsn_lg_save_meta( $post_id ) {
     // CTA Label
     if ( isset( $_POST['dsn_lgp_cta_label'] ) ) {
         update_post_meta( $post_id, 'dsn_lgp_cta_label', sanitize_text_field( $_POST['dsn_lgp_cta_label'] ) );
+    }
+
+    // Padding
+    $padding_fields = array('dsn_lgp_padding_top', 'dsn_lgp_padding_right', 'dsn_lgp_padding_bottom', 'dsn_lgp_padding_left');
+    foreach ($padding_fields as $field) {
+        if ( isset( $_POST[$field] ) ) {
+            update_post_meta( $post_id, $field, sanitize_text_field( $_POST[$field] ) );
+        }
     }
 
     // Logo (ID + URL)

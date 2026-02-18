@@ -24,6 +24,27 @@ $media_type   = get_post_meta( $post->ID, 'dsn_lgp_media_type', true );
 if ( empty( $media_type ) ) { $media_type = 'image'; }
 $media_url    = get_post_meta( $post->ID, 'dsn_lgp_media_url', true );
 $media_poster = get_post_meta( $post->ID, 'dsn_lgp_media_poster', true );
+$padding_top    = get_post_meta( $post->ID, 'dsn_lgp_padding_top', true );
+$padding_right  = get_post_meta( $post->ID, 'dsn_lgp_padding_right', true );
+$padding_bottom = get_post_meta( $post->ID, 'dsn_lgp_padding_bottom', true );
+$padding_left   = get_post_meta( $post->ID, 'dsn_lgp_padding_left', true );
+
+$wrapper_style = '';
+if ( $padding_top || $padding_right || $padding_bottom || $padding_left ) {
+    $wrapper_style = 'style="';
+    
+    // Helper to ensure unit
+    $ensure_unit = function($val) {
+        $val = trim($val);
+        return is_numeric($val) ? $val . 'px' : $val;
+    };
+
+    if ( $padding_top ) $wrapper_style .= 'padding-top:' . esc_attr( $ensure_unit($padding_top) ) . ';';
+    if ( $padding_right ) $wrapper_style .= 'padding-right:' . esc_attr( $ensure_unit($padding_right) ) . ';';
+    if ( $padding_bottom ) $wrapper_style .= 'padding-bottom:' . esc_attr( $ensure_unit($padding_bottom) ) . ';';
+    if ( $padding_left ) $wrapper_style .= 'padding-left:' . esc_attr( $ensure_unit($padding_left) ) . ';';
+    $wrapper_style .= '"';
+}
 
 ?>
 
@@ -33,7 +54,7 @@ $media_poster = get_post_meta( $post->ID, 'dsn_lgp_media_poster', true );
     <?php endif; ?>
 </div>
 
-<div id="dsn-leadgen-wrapper" class="dsn-leadgen-wrap">
+<div id="dsn-leadgen-wrapper" class="dsn-leadgen-wrap" <?php echo $wrapper_style; ?>>
     <div class="dsn-left">
         <?php if ( $main_content ) : ?>
             <div class="dsn-left-content"> <?php echo apply_filters( 'the_content', $main_content ); ?> </div>
