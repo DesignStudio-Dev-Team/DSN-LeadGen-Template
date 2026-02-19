@@ -116,15 +116,12 @@
   width:100%; padding:10px 12px; box-sizing:border-box; border:1px solid #d9d9d9; border-radius:2px; font-size:18px;
 }
 
-/* Larger checkboxes and radios */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"],
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"],
-#dsn-leadgen-wrapper .gform_wrapper input[type="radio"],
-#dsn-leadgen-wrapper .gform_wrapper input[type="checkbox"]
- {
-  transform: scale(1.35);
-  -webkit-transform: scale(1.35);
-  margin-right:8px;
+/* Larger checkboxes and radios — only scale the native inputs that are NOT already hidden/replaced */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"].gfield-choice-input,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"].gfield-choice-input {
+  /* These are hidden+replaced by our custom UI — do NOT scale them here */
+  transform: none;
+  -webkit-transform: none;
 }
 
 /* Make labels bigger for readability */
@@ -194,21 +191,28 @@
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label { cursor:pointer; display:inline-block; color:#222; }
 
-/* Make native inputs visually hidden but still present for accessibility and focus handling. Position absolute so they sit inside container. */
+/* Make native inputs visually hidden but still present for accessibility and focus handling.
+   z-index: 1 ensures they sit ABOVE the ::before pseudo-element so clicks reach the actual input.
+   cursor: pointer so the hand cursor shows up over the invisible hit area. */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"],
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"]{
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"].gfield-choice-input,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"],
+#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"].gfield-choice-input {
   position: absolute;
   opacity: 0;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   margin: 0;
   left: 0px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
+  cursor: pointer;
 }
 
 /* Checkbox square: black border, gray background when unchecked; blue background with white check when checked */
-/* Support different GF choice markup: li, .gchoice, .gfield_choice, and label-wrapped inputs */
+/* Support different GF choice markup: li, .gchoice, .gfield_choice, .gfield-choice-input, and label-wrapped inputs */
+/* pointer-events: none is CRITICAL — prevents the ::before from eating the click meant for the hidden <input> */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice label::before,
@@ -225,45 +229,46 @@
   border: 2px solid #000; /* black border */
   background: #eee; /* light gray background when unchecked */
   box-sizing: border-box;
+  pointer-events: none; /* let clicks fall through to the hidden native input */
+  z-index: 0;
 }
 
-/* Checked state: blue background with white check
-   Only apply blue when the label has an explicit check indicator.
-   We treat two structural variants as having an indicator:
-   - label contains a span (label > span) — we style span::before/after
-*/
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label.dsn-has-after::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label.dsn-has-after::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label.dsn-has-after::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label.dsn-has-after::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label.dsn-has-after::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label.dsn-has-after::before,
+/* Checkbox checked state: blue background with white checkmark.
+   Covers all GF markup variants:
+     - Standard: input before label (input:checked + label)
+     - .gchoice wrapper with input + label sibling
+     - JS fallback: .dsn-checked on the container
+     - label-wrapped input with span */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label::before,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label > input:checked + span::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::before
-{
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::before {
   background: #0b6b82; /* blue */
   border-color: #0b6b82;
 }
-/* Checkmark (only where the after/dot exists) */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label.dsn-has-after::after,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label.dsn-has-after::after,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label.dsn-has-after::after,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label.dsn-has-after::after,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label.dsn-has-after::after,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label.dsn-has-after::after,
+/* Checkmark tick — pointer-events:none so it doesn't block the hidden input click area */
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice input[type="checkbox"]:checked + label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li.dsn-checked label::after,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gchoice.dsn-checked label::after,
+#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox .gfield_choice.dsn-checked label::after,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label > input:checked + span::after,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::after {
   content: '';
   position: absolute;
-  left: 9px;
+  left: 8px;
   top: 50%;
   transform: translateY(-60%) rotate(45deg);
   width: 6px;
   height: 12px;
   border-right: 2px solid #fff;
   border-bottom: 2px solid #fff;
+  pointer-events: none;
 }
 
 /* Hover/focus states */
@@ -275,6 +280,7 @@
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox li label:focus::before { box-shadow: 0 0 0 3px rgba(11,107,130,0.06); }
 
 /* Mirror checkbox selectors for radio variants (round) to cover all GF markup patterns */
+/* pointer-events: none prevents the ::before from eating clicks meant for the hidden <input> */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice label::before,
@@ -282,15 +288,17 @@
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio label::before {
   content: '';
   position: absolute;
-  left: 6px;
+  left: 0px;
   top: 50%;
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
   border-radius: 50%;
-border: 2px solid #000; /* black border */
+  border: 2px solid #000; /* black border */
   background: #eee; /* light gray background when unchecked */
   box-sizing: border-box;
+  pointer-events: none; /* let clicks fall through to the hidden native input */
+  z-index: 0;
 }
 
 /* Radio checked state: blue background with white inner dot */
@@ -321,24 +329,7 @@ border: 2px solid #000; /* black border */
   background: #fff;
 }
 
-/* Radio circle: support different GF markup variants */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio li label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gfield_choice label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input + span::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label::before {
-  content: '';
-  position: absolute;
-  left: 0px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid #000; /* black border */
-  background: #eee; /* light gray background when unchecked */
-  box-sizing: border-box;
-}
+/* Radio circle: duplicate block removed — consolidated into the block above */
 /* Radio checked state - covers input+label and JS-driven container.dsn-checked */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio li input[type="radio"]:checked + label::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio .gchoice input[type="radio"]:checked + label::before,
@@ -451,32 +442,6 @@ border: 2px solid #000; /* black border */
 /* Ensure checked states cover label-wrapped inputs (label > input + span) and other GF markup variants */
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input:checked + span::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input:checked + label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label input[type="radio"]:checked + span::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label > input:checked + span::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::before {
-  background: #0b6b82 !important;
-  border-color: #0b6b82 !important;
-}
-
-/* Keep a visible focus/active ring for keyboard and touch users, but don't override the checked color */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"]:focus + label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label:focus::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"]:focus + label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label:focus::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label:active::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label:active::before {
-  box-shadow: 0 0 0 3px rgba(11,107,130,0.06);
-  outline: none;
-}
-
-/* Keep a visible focus ring for keyboard users but don't change the indicator color */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio input[type="radio"]:focus-visible + label::before,
-#dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox input[type="checkbox"]:focus-visible + label::before {
-  box-shadow: 0 0 0 3px rgba(11,107,130,0.12);
-}
-
-/* Ensure checked states cover label-wrapped inputs (label > input + span) and other GF markup variants */
-#dsn-leadgen-wrapper .gform_wrapper .gfield_radio label > input:checked + span::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_radio label input[type="radio"]:checked + span::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label > input:checked + span::before,
 #dsn-leadgen-wrapper .gform_wrapper .gfield_checkbox label input[type="checkbox"]:checked + span::before {
