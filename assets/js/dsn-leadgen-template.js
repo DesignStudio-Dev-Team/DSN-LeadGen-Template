@@ -1,23 +1,20 @@
-// Minimal front-end JS for DSN LeadGen Template
-// Handles custom checkbox/radio visual state for Gravity Forms multi-page forms.
+// DSN LeadGen Template — front-end JS
+// Custom checkbox/radio visuals + scroll-to-form on GF multi-page navigation.
 
-(function(){
+(function($){
   'use strict';
 
-  document.addEventListener('DOMContentLoaded', function(){
+  $(document).ready(function(){
     var wrapper = document.getElementById('dsn-leadgen-wrapper');
     if ( ! wrapper ) { return; }
 
     function findChoiceContainer(el){
-      // Walk up to find the best container: gchoice div, li, or label itself
       return el.closest('.gchoice') || el.closest('.gfield_choice') || el.closest('li') || el.closest('label') || el.parentElement;
     }
 
     function initChoices(){
-      // Grab all inputs inside the wrapper fresh each time (GF replaces DOM on page change)
       var inputs = wrapper.querySelectorAll('input[type="checkbox"], input[type="radio"]');
       inputs.forEach(function(input){
-        // Skip if already bound (check a custom flag)
         if ( input._dsnBound ) { return; }
         input._dsnBound = true;
 
@@ -27,35 +24,27 @@
           if ( ! container ) { return; }
           if ( input.type === 'radio' ) {
             if ( input.checked ) {
-              // Remove checked class from sibling radios in the same group
               try {
-                var groupName = input.name;
-                var group = wrapper.querySelectorAll('input[type="radio"][name="' + CSS.escape(groupName) + '"]');
+                var group = wrapper.querySelectorAll('input[type="radio"][name="' + CSS.escape(input.name) + '"]');
                 group.forEach(function(r){
                   var c = findChoiceContainer(r);
                   if ( c && c !== container ) { c.classList.remove('dsn-checked'); }
                 });
-              } catch (e) { /* ignore */ }
+              } catch(e){}
               container.classList.add('dsn-checked');
             } else {
               container.classList.remove('dsn-checked');
             }
           } else {
-            if ( input.checked ) {
-              container.classList.add('dsn-checked');
-            } else {
-              container.classList.remove('dsn-checked');
-            }
+            container.classList[ input.checked ? 'add' : 'remove' ]('dsn-checked');
           }
         }
 
         input.addEventListener('change', update);
 
-        // Allow radio buttons to be deselected by clicking the already-selected option
+        // Allow radio to be deselected by clicking the already-selected option
         if ( input.type === 'radio' ) {
-          input.addEventListener('mousedown', function(){
-            input.dataset.wasChecked = input.checked ? 'true' : 'false';
-          });
+          input.addEventListener('mousedown', function(){ input.dataset.wasChecked = input.checked ? 'true' : 'false'; });
           input.addEventListener('click', function(e){
             if ( input.dataset.wasChecked === 'true' ) {
               e.preventDefault();
@@ -65,7 +54,7 @@
           });
         }
 
-        // Also fire update when the label is clicked (GF may re-render label text)
+        // Keep visuals in sync when label is clicked too
         var label = container && (container.querySelector('label') || (container.tagName === 'LABEL' ? container : null));
         if ( label ) {
           label.addEventListener('mousedown', function(){ label.dataset.wasChecked = input.checked ? 'true' : 'false'; });
@@ -78,28 +67,41 @@
           });
         }
 
-        // Set initial state
         update();
       });
     }
 
-    // Run on initial load
+    function scrollToForm(){
+      var top = wrapper.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+
+    // Run once on initial load
     initChoices();
 
-    // Re-run whenever GF rerenders (multi-page navigation, conditional logic, etc.)
-    // gform_post_render fires on the document when any GF form or page is rendered/updated.
-    document.addEventListener('gform_post_render', function(){
-      // Reset _dsnBound flags so new inputs in the rerendered page get bound
+    // ── AJAX multi-page navigation ───────────────────────────────────────────
+    // GF fires gform_post_render via jQuery — MUST use jQuery .on() here,
+    // native addEventListener will NOT receive jQuery-triggered events.
+    $(document).on('gform_post_render', function(event, formId, currentPage){
+      // Re-bind any new inputs injected by GF
       var inputs = wrapper.querySelectorAll('input[type="checkbox"], input[type="radio"]');
       inputs.forEach(function(input){ input._dsnBound = false; });
       setTimeout(initChoices, 50);
 
-      // Scroll to the top of the form wrapper so the user always sees step start
-      setTimeout(function(){
-        var top = wrapper.getBoundingClientRect().top + window.pageYOffset - 20;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }, 80);
+      // Scroll to the top of the form on every page transition
+      setTimeout(scrollToForm, 100);
     });
+
+    // ── Non-AJAX fallback (full page reload) ─────────────────────────────────
+    // Store a flag before form submits so next load knows to scroll.
+    $(document).on('click', '.gform_next_button, .gform_previous_button', function(){
+      sessionStorage.setItem('dsn_gf_scroll', '1');
+    });
+    if ( sessionStorage.getItem('dsn_gf_scroll') ) {
+      sessionStorage.removeItem('dsn_gf_scroll');
+      setTimeout(scrollToForm, 150);
+    }
+
   });
 
-})();
+}(jQuery));
